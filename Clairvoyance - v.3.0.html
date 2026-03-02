@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clairvoyance — Complete Strategy Guide</title>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link href="https://api.fontshare.com/v2/css?f[]=neue-montreal@300,400,500,600,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ─────────────────────────────────────── */
+:root {
+  --w:    #f9f8f5;
+  --off:  #f2f0eb;
+  --line: #e4e0d8;
+  --ln2:  #d0ccc4;
+  --ink:  #111110;
+  --i2:   #3a3935;
+  --i3:   #7a7870;
+  --i4:   #b0ada6;
+  --g:    #2d5a3d;
+  --gb:   #eef5f1;
+  --r:    #8b2020;
+  --rb:   #fdf0f0;
+  --b:    #1a3a6b;
+  --bb:   #eef2f9;
+  --sans: "Neue Montreal","Helvetica Neue",Arial,sans-serif;
+  --mono: "Roobert Mono","JetBrains Mono","Courier New",monospace;
+  --ease: cubic-bezier(0.16,1,0.3,1);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--w);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden;cursor:none;}
+
+/* ── CURSOR ──────────────────────────────────────── */
+#cur{position:fixed;width:7px;height:7px;background:var(--ink);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .18s var(--ease),height .18s var(--ease);mix-blend-mode:multiply;}
+#cur.big{width:34px;height:34px;}
+
+/* ── NAV ─────────────────────────────────────────── */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:16px 48px;background:rgba(249,248,245,.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line);}
+.nl{display:flex;align-items:center;gap:10px;}
+.nl img{height:22px;width:auto;}
+.nl-t{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink);font-weight:500;white-space:nowrap;}
+.nr{display:flex;align-items:center;gap:28px;}
+.nr a{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--i3);transition:color .2s;text-decoration:none;}
+.nr a:hover,.nr a.on{color:var(--ink);}
+.nbadge{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--ln2);padding:4px 12px;color:var(--i2);}
+@media(max-width:768px){nav{padding:12px 20px;}.nr{display:none;}}
+
+/* ── SHELL ───────────────────────────────────────── */
+.shell{max-width:1040px;margin:0 auto;padding:0 48px;}
+@media(max-width:768px){.shell{padding:0 20px;}}
+
+/* ── HEADER ──────────────────────────────────────── */
+header{padding:148px 0 88px;border-bottom:2px solid var(--ink);position:relative;}
+.h-kicker{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--i3);margin-bottom:24px;display:flex;align-items:center;gap:14px;}
+.h-kicker::before{content:'';display:block;width:32px;height:1px;background:var(--i3);}
+.h-kicker-dot{width:5px;height:5px;border-radius:50%;background:var(--ink);animation:blink 2s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
+h1{font-family:var(--sans);font-size:clamp(40px,6vw,80px);font-weight:600;line-height:1.0;letter-spacing:-.03em;max-width:840px;margin-bottom:32px;color:var(--ink);overflow-wrap:break-word;}
+h1 em{font-style:italic;font-weight:300;}
+.h-sub{font-size:16px;color:var(--i3);max-width:480px;font-weight:300;line-height:1.65;margin-bottom:48px;}
+.tags{display:flex;flex-wrap:wrap;gap:7px;}
+.tag{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--ln2);padding:4px 11px;color:var(--i3);}
+.tag.new{border-color:var(--ink);color:var(--ink);background:var(--ink);color:var(--w);}
+.tag.sig{border-color:var(--ink);color:var(--ink);}
+
+/* ── SECTION LAYOUT ──────────────────────────────── */
+section{padding:80px 0;border-bottom:1px solid var(--line);}
+section:last-of-type{border-bottom:none;}
+.sh{display:flex;align-items:baseline;gap:20px;margin-bottom:8px;}
+.sn{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--i3);white-space:nowrap;padding-top:3px;}
+h2{font-family:var(--sans);font-size:clamp(24px,3vw,36px);font-weight:600;letter-spacing:-.02em;line-height:1.1;color:var(--ink);}
+.sd{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--i4);margin-top:6px;margin-bottom:44px;max-width:560px;}
+
+/* ── DEF BOX ─────────────────────────────────────── */
+.def-split{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--line);margin-bottom:36px;}
+@media(max-width:600px){.def-split{grid-template-columns:1fr;}}
+.def-col{background:var(--w);padding:32px 28px;}
+.def-col-lbl{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--i4);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--line);}
+.def-ex{font-family:var(--mono);font-size:12px;color:var(--i2);line-height:1.75;background:var(--off);border:1px solid var(--line);padding:14px 16px;margin-top:12px;}
+.def-ex .lbl{display:block;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--i4);margin-bottom:8px;}
+.def-ex .hi{color:var(--ink);font-weight:500;}
+.prose{font-size:14px;color:var(--i2);line-height:1.75;max-width:720px;}
+.prose strong{color:var(--ink);font-weight:600;}
+
+/* ── HOW STEPS ───────────────────────────────────── */
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--line);border:1px solid var(--line);}
+@media(max-width:640px){.how-grid{grid-template-columns:1fr;}}
+.hs{background:var(--w);padding:28px 24px;transition:background .15s;}
+.hs:hover{background:var(--off);}
+.hs-n{font-family:var(--mono);font-size:28px;font-weight:300;color:var(--line);line-height:1;margin-bottom:16px;}
+.hs-t{font-size:14px;font-weight:600;margin-bottom:6px;}
+.hs-d{font-size:12px;color:var(--i2);line-height:1.6;}
+
+/* ── FEATURE ACCORDIONS ──────────────────────────── */
+.fac{border:1px solid var(--line);margin-bottom:2px;overflow:hidden;transition:border-color .2s;}
+.fac:hover{border-color:var(--ln2);}
+.fac-hd{display:flex;align-items:center;gap:14px;padding:20px 24px;cursor:pointer;user-select:none;background:var(--off);transition:background .15s;border-bottom:1px solid transparent;}
+.fac.open .fac-hd{border-bottom-color:var(--line);}
+.fac-hd:hover{background:var(--line);}
+.fac-icon{width:28px;height:28px;flex-shrink:0;}
+.fac-icon svg{width:28px;height:28px;stroke:var(--ink);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.fac-t{font-size:14px;font-weight:600;flex:1;min-width:0;overflow-wrap:break-word;}
+.fac-badge{font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border:1px solid var(--ln2);color:var(--i3);}
+.fac-chev{flex-shrink:0;transition:transform .3s var(--ease);}
+.fac-chev svg{width:16px;height:16px;stroke:var(--i3);fill:none;stroke-width:2;}
+.fac.open .fac-chev{transform:rotate(180deg);}
+.fac-body{display:none;grid-template-columns:1fr 1fr;gap:0;background:var(--line);}
+.fac.open .fac-body{display:grid;}
+@media(max-width:560px){.fac-body{grid-template-columns:1fr;}}
+.fc{background:var(--w);padding:20px 24px;border-right:none;border-bottom:none;}
+.fc-t{font-size:13px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:8px;}
+.fc-t .nf{font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;background:var(--ink);color:var(--w);padding:2px 5px;}
+.fc-d{font-size:12px;color:var(--i2);line-height:1.65;}
+
+/* ── CONCEPTS ────────────────────────────────────── */
+.concepts{display:flex;flex-direction:column;gap:0;border:1px solid var(--line);}
+.concept{display:grid;grid-template-columns:260px 1fr;border-bottom:1px solid var(--line);transition:background .15s;}
+.concept:last-child{border-bottom:none;}
+.concept:hover{background:var(--off);}
+@media(max-width:640px){.concept{grid-template-columns:1fr;}}
+.cl{padding:28px 24px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:10px;justify-content:flex-start;}
+.c-ico{width:32px;height:32px;}
+.c-ico svg{width:32px;height:32px;stroke:var(--ink);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.c-ttl{font-size:15px;font-weight:600;letter-spacing:-.01em;line-height:1.25;overflow-wrap:break-word;word-break:break-word;}
+.c-badge{font-family:var(--mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--ink);padding:2px 8px;display:inline-block;width:fit-content;}
+.cr{padding:28px 32px;}
+.cr p{font-size:13px;color:var(--i2);line-height:1.7;margin-bottom:10px;}
+.cr p:last-child{margin-bottom:0;}
+.c-vs{margin-top:16px;padding:12px 16px;background:var(--off);border-left:2px solid var(--ink);font-family:var(--mono);font-size:10px;color:var(--i3);line-height:1.6;}
+.c-vs-lbl{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);display:block;margin-bottom:4px;}
+
+/* ── REWARDS GRID ────────────────────────────────── */
+.rg{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--line);}
+@media(max-width:800px){.rg{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:480px){.rg{grid-template-columns:1fr;}}
+.rc{background:var(--w);padding:28px 24px;transition:background .15s;}
+.rc:hover{background:var(--off);}
+.rc-ico{width:28px;height:28px;margin-bottom:16px;}
+.rc-ico svg{width:28px;height:28px;stroke:var(--ink);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.rc-t{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.04em;margin-bottom:6px;display:flex;align-items:flex-start;gap:6px;flex-wrap:wrap;overflow-wrap:break-word;}
+.rc-nf{font-size:7px;letter-spacing:.1em;text-transform:uppercase;background:var(--ink);color:var(--w);padding:2px 4px;}
+.rc-d{font-size:12px;color:var(--i2);line-height:1.6;}
+
+/* ── FLOW STRIP ──────────────────────────────────── */
+.flow{display:flex;align-items:stretch;border:1px solid var(--line);overflow:hidden;}
+@media(max-width:600px){.flow{flex-direction:column;}}
+.fn{flex:1;padding:24px 18px;border-right:1px solid var(--line);text-align:center;position:relative;transition:background .15s;}
+.fn:last-child{border-right:none;}
+.fn:hover{background:var(--off);}
+.fn-ico{width:24px;height:24px;margin:0 auto 12px;}
+.fn-ico svg{width:24px;height:24px;stroke:var(--ink);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.fn-t{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:5px;font-weight:600;}
+.fn-d{font-size:11px;color:var(--i2);line-height:1.5;}
+.fn-arr{position:absolute;right:-10px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:13px;color:var(--ink);z-index:2;background:var(--w);padding:0 2px;}
+
+/* ── RISKS ───────────────────────────────────────── */
+.risks{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--line);}
+@media(max-width:560px){.risks{grid-template-columns:1fr;}}
+.rk{background:var(--w);padding:28px 24px;border-left:3px solid transparent;transition:background .15s;}
+.rk:hover{background:var(--off);}
+.rk.danger{border-left-color:var(--r);}
+.rk.warn{border-left-color:var(--ln2);}
+.rk-hd{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.rk-ico{width:20px;height:20px;flex-shrink:0;}
+.rk-ico svg{width:20px;height:20px;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.rk.danger .rk-ico svg{stroke:var(--r);}
+.rk.warn .rk-ico svg{stroke:var(--ln2);}
+.rk-t{font-size:13px;font-weight:600;}
+.rk-d{font-size:12px;color:var(--i2);line-height:1.65;}
+.rk-mit{margin-top:12px;padding:10px 14px;background:var(--off);border-left:2px solid var(--g);font-family:var(--mono);font-size:10px;color:var(--i3);line-height:1.55;}
+.rk-ml{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--g);display:block;margin-bottom:3px;}
+
+/* ── TECH STACK ──────────────────────────────────── */
+.stack{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--line);}
+@media(max-width:580px){.stack{grid-template-columns:1fr;}}
+.sc{background:var(--w);padding:24px 22px;}
+.sc-lbl{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px;}
+.sc-lbl::before{content:'';width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.sc.amber .sc-lbl::before{background:var(--ink);}
+.sc.emerald .sc-lbl::before{background:var(--g);}
+.sc.sapphire .sc-lbl::before{background:var(--b);}
+.si{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--i2);}
+.si:last-child{border-bottom:none;}
+.si-d{width:4px;height:4px;border-radius:50%;flex-shrink:0;}
+.sc.amber .si-d{background:var(--ink);}
+.sc.emerald .si-d{background:var(--g);}
+.sc.sapphire .si-d{background:var(--b);}
+
+/* ── GETTING STARTED ─────────────────────────────── */
+.gs{border:1px solid var(--line);}
+.gi{display:flex;align-items:flex-start;border-bottom:1px solid var(--line);transition:background .15s;}
+.gi:last-child{border-bottom:none;}
+.gi:hover{background:var(--off);}
+.gi-n{width:56px;padding:18px 0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:20px;font-weight:300;color:var(--line);border-right:1px solid var(--line);flex-shrink:0;}
+.gi-c{padding:18px 22px;flex:1;}
+.gi-t{font-size:13px;font-weight:600;margin-bottom:3px;}
+.gi-d{font-size:12px;color:var(--i2);line-height:1.55;}
+
+/* ── COMPARISON TABLE ────────────────────────────── */
+.tbl-wrap{border:1px solid var(--line);overflow:hidden;overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:540px;}
+thead th{background:var(--off);padding:13px 18px;text-align:left;font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--i3);border-bottom:1px solid var(--line);white-space:nowrap;}
+thead th:first-child{color:var(--ink);}
+tbody tr{border-bottom:1px solid var(--line);transition:background .12s;}
+tbody tr:last-child{border-bottom:none;}
+tbody tr:hover{background:var(--off);}
+td{padding:10px 18px;color:var(--i3);vertical-align:middle;border-right:1px solid var(--line);}
+td:last-child{border-right:none;}
+td:first-child{color:var(--ink);font-weight:500;}
+.ty{color:var(--g);font-family:var(--mono);font-size:10px;font-weight:600;}
+.tn{color:var(--i4);font-family:var(--mono);font-size:10px;}
+.tp{color:var(--b);font-family:var(--mono);font-size:10px;}
+.tc{color:var(--ink);font-family:var(--mono);font-size:10px;font-weight:600;}
+
+/* ── CLOSING ─────────────────────────────────────── */
+.manifesto{background:var(--ink);padding:56px 60px;margin-top:0;}
+.manifesto h2{font-size:clamp(22px,3vw,34px);font-weight:600;letter-spacing:-.02em;color:var(--w);margin-bottom:24px;line-height:1.1;}
+.manifesto h2 em{font-style:italic;font-weight:300;}
+.manifesto p{font-size:14px;color:rgba(249,248,245,.6);line-height:1.8;margin-bottom:14px;max-width:640px;}
+.manifesto p:last-child{margin-bottom:0;font-family:var(--mono);font-size:11px;color:rgba(249,248,245,.25);margin-top:32px;}
+.manifesto strong{color:var(--w);}
+@media(max-width:600px){.manifesto{padding:36px 24px;}}
+
+/* ── FOOTER ──────────────────────────────────────── */
+footer{padding:36px 0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;border-top:1px solid var(--line);}
+.fl,.fr{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--i4);}
+
+/* ── REVEAL ──────────────────────────────────────── */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .6s var(--ease),transform .6s var(--ease);}
+.rv.in{opacity:1;transform:translateY(0);}
+.rv1{transition-delay:.08s;}.rv2{transition-delay:.16s;}.rv3{transition-delay:.24s;}.rv4{transition-delay:.32s;}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nl">
+    <img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAfQB9ADASIAAhEBAxEB/8QAHAABAAIDAQEBAAAAAAAAAAAAAAECAwQFBgcI/8QARhABAQACAgEDAgMEBgcGBQMFAAECAwQRMQUhYQYSBxNBFCJRcTJCgZGh0RVSYnKxweEjM0N0wvAXJDVTkiWCslRkk6Lx/8QAGgEBAQEBAQEBAAAAAAAAAAAAAAIDAQUEBv/EAC4RAQEAAgEDAwMEAQQDAQAAAAABAhEDBAUSITFBIlFhEyNxgTIVQqHwMzSRsf/aAAwDAQACEQMRAD8A/GQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJ6BAnoBAAAAAAAAAAAAAAAlAAnpAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAno6BCekgI6SdJ6BAnpPQK9HS3SegU6R0v1/wC+09f++wY+k9fC/R0CnXwd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AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAT2gBPZ2gBPZ2gBPZ2gBKAAABJ2gBPZ2gBPZ2gBPZ2gBPaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB/9k=" alt="Clairvoyance">
+    <span class="nl-t">Clairvoyance</span>
+  </div>
+  <div class="nr">
+    <a href="#what">What</a>
+    <a href="#features">Features</a>
+    <a href="#new">New</a>
+    <a href="#rewards">Rewards</a>
+    <a href="#risks">Risks</a>
+    <a href="#compare">Compare</a>
+  </div>
+  <div class="nbadge">V3 Strategy</div>
+</nav>
+
+<div class="shell">
+
+<!-- HEADER -->
+<header>
+  <div class="h-kicker rv"><div class="h-kicker-dot"></div>Complete Strategy Guide · 2025</div>
+  <h1 class="rv rv1">What Prediction<br>Markets Are<br><em>Supposed</em> to Be</h1>
+  <p class="h-sub rv rv2">The combinatorial prediction platform that treats market complexity as a feature — not a problem to be simplified away.</p>
+  <div class="tags rv rv3">
+    <span class="tag new">New: Prediction Insurance</span>
+    <span class="tag new">New: Thesis Versioning</span>
+    <span class="tag new">New: Adversarial Oracle</span>
+    <span class="tag new">New: Settlement Tokens</span>
+    <span class="tag sig">Risks Included</span>
+    <span class="tag">Tech Stack</span>
+  </div>
+</header>
+
+
+<!-- §01 WHAT IS CLAIRVOYANCE -->
+<section id="what">
+  <div class="shell">
+    <div class="sh rv"><span class="sn">01</span><h2>What Is Clairvoyance?</h2></div>
+    <p class="sd">// the core premise in plain terms</p>
+    <div class="def-split rv rv1">
+      <div class="def-col">
+        <div class="def-col-lbl">Regular Prediction Markets</div>
+        <div class="def-ex">
+          <span class="lbl">Example</span>
+          Will Bitcoin reach $100,000?<br><br>
+          <span class="hi">Yes or No.</span><br><br>
+          One event. One outcome. No structure.
+        </div>
+      </div>
+      <div class="def-col">
+        <div class="def-col-lbl">Clairvoyance</div>
+        <div class="def-ex">
+          <span class="lbl">Example</span>
+          Bitcoin reaches $100K<br>
+          <span class="hi">AND</span> Ethereum processes more txns than BTC<br>
+          <span class="hi">AND</span> gas fees drop below 10 gwei.<br><br>
+          All three must happen. Express your actual thesis.
+        </div>
+      </div>
+    </div>
+    <p class="prose rv rv2">Real-world events don't happen in isolation. They influence each other, correlate, cascade. Yet every major prediction market today forces users to fragment their view of the world across disconnected, single-outcome markets — losing the very structure of the thesis in the process. Clairvoyance is built on one premise: <strong>betting on combinations should be the default, not an advanced feature.</strong></p>
+  </div>
+</section>
+
+
+<!-- §02 HOW IT WORKS -->
+<section id="how">
+  <div class="shell">
+    <div class="sh rv"><span class="sn">02</span><h2>How It Works</h2></div>
+    <p class="sd">// six steps from blank slate to settled position</p>
+    <div class="how-grid rv rv1">
+      <div class="hs">
+        <div class="hs-n">01</div>
+        <div class="hs-t">Choose Your Outcomes</div>
+        <div class="hs-d">Select 2–10 events across sports, crypto, politics, macro. Or write your thesis in plain English — Thesis Canvas maps it to live markets.</div>
+      </div>
+      <div class="hs">
+        <div class="hs-n">02</div>
+        <div class="hs-t">System Calculates Odds</div>
+        <div class="hs-d">Correlation-aware AMM prices your combination using real co-movement data — not naive independent probability multiplication.</div>
+      </div>
+      <div class="hs">
+        <div class="hs-n">03</div>
+        <div class="hs-t">Place Your Bet</div>
+        <div class="hs-d">Deposit into smart contract escrow. No custodian. No counterparty risk from a company holding your funds. Code holds it.</div>
+      </div>
+      <div class="hs">
+        <div class="hs-n">04</div>
+        <div class="hs-t">Receive Position NFT</div>
+        <div class="hs-d">Your combo mints as a composable ERC-721. Trade it, split legs out of it, collateralize it in DeFi, or hold to resolution.</div>
+      </div>
+      <div class="hs">
+        <div class="hs-n">05</div>
+        <div class="hs-t">Oracle Resolution</div>
+        <div class="hs-d">Multi-source oracle mesh reports outcomes. Any disputed resolution can be challenged by staked users through the Adversarial Oracle system.</div>
+      </div>
+      <div class="hs">
+        <div class="hs-n">06</div>
+        <div class="hs-t">Collect or Reinvest</div>
+        <div class="hs-d">Smart contract pays automatically. Or convert winning positions into Structured Settlement Tokens for yield while awaiting final resolution.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- §03 CORE FEATURES -->
+<section id="features">
+  <div class="shell">
+    <div class="sh rv"><span class="sn">03</span><h2>Core Features</h2></div>
+    <p class="sd">// the foundation every tier of user experiences</p>
+
+    <!-- Combo Builder -->
+    <div class="fac rv rv1" data-fac>
+      <div class="fac-hd" role="button" tabindex="0">
+        <div class="fac-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
+        <div class="fac-t">Combo Builder Interface</div>
+        <span class="fac-badge">Core</span>
+        <div class="fac-chev"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+      </div>
+      <div class="fac-body">
+        <div class="fc"><div class="fc-t">Drag-and-Drop Outcome Linking</div><div class="fc-d">Chain 2–10 outcomes from any category. Correlation coefficient and combined probability update live with every addition.</div></div>
+        <div class="fc"><div class="fc-t">Thesis Canvas <span class="nf">New</span></div><div class="fc-d">Write your thesis in plain English. AI maps it to live markets and proposes a combo structure. You edit, accept, or reject each leg.</div></div>
+        <div class="fc"><div class="fc-t">Conditional Logic Builder <span class="nf">New</span></div><div class="fc-d">Build IF/AND/OR structures. Express nuanced views without finance or coding knowledge.</div></div>
+        <div class="fc"><div class="fc-t">Full Payout Scenario Matrix</div><div class="fc-d">Before confirming, see your exact return under every possible resolution combination. No surprises at settlement.</div></div>
+      </div>
+    </div>
+
+    <!-- AMM -->
+    <div class="fac rv rv2" data-fac>
+      <div class="fac-hd" role="button" tabindex="0">
+        <div class="fac-icon"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></div>
+        <div class="fac-t">Automated Market Maker</div>
+        <span class="fac-badge">Core</span>
+        <div class="fac-chev"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+      </div>
+      <div class="fac-body">
+        <div class="fc"><div class="fc-t">Correlation-Aware Pricing</div><div class="fc-d">Prices combos using actual historical co-movement — not the naive assumption that all events are independent.</div></div>
+        <div class="fc"><div class="fc-t">Always-Available Counterparty</div><div class="fc-d">No waiting for the other side of your bet. AMM is always present. Executes at fair odds regardless of market depth.</div></div>
+        <div class="fc"><div class="fc-t">Partial Fill Engine <span class="nf">New</span></div><div class="fc-d">Combos with some illiquid legs still fill on the liquid ones. Queue the rest. No all-or-nothing execution failures.</div></div>
+        <div class="fc"><div class="fc-t">Dynamic Liquidity Incentives</div><div class="fc-d">LP rewards scale with combo complexity. Providing liquidity on a 10-leg market earns 10× the base rate.</div></div>
+      </div>
+    </div>
+
+    <!-- Position Primitives -->
+    <div class="fac rv rv3" data-fac>
+      <div class="fac-hd" role="button" tabindex="0">
+        <div class="fac-icon"><svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
+        <div class="fac-t">Position Primitives</div>
+        <span class="fac-badge">Core</span>
+        <div class="fac-chev"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+      </div>
+      <div class="fac-body">
+        <div class="fc"><div class="fc-t">Composable Position NFTs</div><div class="fc-d">Every bet mints an ERC-721. Trade it, collateralize it in DeFi, gift it, or split it into component legs.</div></div>
+        <div class="fc"><div class="fc-t">Leg Extraction Engine <span class="nf">New</span></div><div class="fc-d">Pull individual resolved legs out of your running combo. Sell the won ones as liquid shares while remaining legs continue.</div></div>
+        <div class="fc"><div class="fc-t">Progressive Partial Payout</div><div class="fc-d">As individual legs resolve, proportional payouts unlock automatically. No waiting months for the final event to collect anything.</div></div>
+        <div class="fc"><div class="fc-t">Structured Settlement Tokens <span class="nf">New</span></div><div class="fc-d">Convert a winning position into a fixed-yield token while awaiting final resolution. Capital earns instead of sitting idle.</div></div>
+      </div>
+    </div>
+
+    <!-- Oracle -->
+    <div class="fac rv rv4" data-fac>
+      <div class="fac-hd" role="button" tabindex="0">
+        <div class="fac-icon"><svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg></div>
+        <div class="fac-t">Oracle Network</div>
+        <span class="fac-badge">Core</span>
+        <div class="fac-chev"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+      </div>
+      <div class="fac-body">
+        <div class="fc"><div class="fc-t">Multi-Source Oracle Mesh <span class="nf">New</span></div><div class="fc-d">Outcomes resolved by weighted combination of Chainlink feeds, institutional sources, and social consensus — never a single oracle.</div></div>
+        <div class="fc"><div class="fc-t">Adversarial Oracle Challenges <span class="nf">New</span></div><div class="fc-d">Any user can challenge a resolution with a staked deposit. Goes to a merit-selected expert panel. Valid challenges earn a fee.</div></div>
+        <div class="fc"><div class="fc-t">Reputation-Weighted Voting</div><div class="fc-d">Resolvers stake tokens and earn fees for accuracy. Calibration Score gates participation — only proven-accurate users resolve disputes.</div></div>
+        <div class="fc"><div class="fc-t">Slashing & Accountability</div><div class="fc-d">False resolution attempts slash the resolver's staked collateral — not just reputation. Financial skin in the game at every level.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- §04 GENUINELY NEW IDEAS -->
+<section id="new">
+  <div class="shell">
+    <div class="sh rv"><span class="sn">04</span><h2>What No Other Platform Offers</h2></div>
+    <p class="sd">// structural innovations — not incremental features</p>
+
+    <div class="concepts rv rv1">
+
+      <div class="concept">
+        <div class="cl">
+          <div class="c-ico"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <div class="c-ttl">Prediction Insurance</div>
+          <span class="c-badge">New · Unique</span>
+        </div>
+        <div class="cr">
+          <p>Buy coverage on a specific leg of your combo against oracle error, resolution ambiguity, or extreme edge cases — not against being wrong. If a market resolves incorrectly due to technical failure or genuine ambiguity, your insured leg pays out regardless of the stated result.</p>
+          <p>Insurance premiums are priced by the protocol based on historical oracle accuracy, complexity of resolution criteria, and current staked coverage pool depth. LPs who deposit into Insurance Pools earn premiums as passive income.</p>
+          <div class="c-vs"><span class="c-vs-lbl">vs. Polymarket &amp; Kalshi</span>Neither platform offers any mechanism for users to hedge against bad resolution. When UMA token holders resolve a Polymarket market incorrectly, affected traders have no recourse. Clairvoyance makes trust in resolution economically enforceable.</div>
+        </div>
+      </div>
+
+      <div class="concept">
+        <div class="cl">
+          <div class="c-ico"><svg viewBox="0 0 24 24"><g transform="rotate(45,12,12)"><path d="M9.5 2 L14.5 2 L14.5 15.5 L12 20.5 L9.5 15.5 Z"/><line x1="9.5" y1="4.5" x2="14.5" y2="4.5"/><line x1="9.5" y1="15.5" x2="14.5" y2="15.5"/></g><path d="M6 18 C4.5 17 3 18.5 3.5 20.5 C4 22 2.5 21.5 2 20.5"/></svg></div>
+          <div class="c-ttl">Thesis Versioning</div>
+          <span class="c-badge">New · Unique</span>
+        </div>
+        <div class="cr">
+          <p>When you update your combo's reasoning — adding a leg, removing one, changing your written thesis — the platform keeps a public, timestamped changelog. Your reasoning history is part of your public reputation profile. You can't retroactively claim you "always knew" something.</p>
+          <p>Top traders with well-documented thesis histories — including their publicly recorded wrong calls — earn higher Trust Scores than traders with identical accuracy but no documented reasoning. Intellectual honesty has economic value here.</p>
+          <div class="c-vs"><span class="c-vs-lbl">vs. Polymarket &amp; Kalshi</span>Both platforms show you a position, not the thinking behind it. There is no way to distinguish a lucky guesser from a rigorous analyst with identical win rates. Thesis Versioning makes the difference visible and rewards it.</div>
+        </div>
+      </div>
+
+      <div class="concept">
+        <div class="cl">
+          <div class="c-ico"><svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></div>
+          <div class="c-ttl">Adversarial Oracle Challenges</div>
+          <span class="c-badge">New · Unique</span>
+        </div>
+        <div class="cr">
+          <p>When a market resolves in a way a user believes is incorrect, they open a formal Challenge by staking CLRV tokens. The challenge routes to a randomly selected panel of users with a top-quartile Calibration Score in the relevant domain — not to the general token-holder base.</p>
+          <p>The panel reviews the resolution criteria, the real-world evidence, and the challenge argument. If the challenge succeeds, the challenger earns a fee from the losing oracle's slashed stake. If it fails, the challenger's stake is slashed and distributed to the panel.</p>
+          <div class="c-vs"><span class="c-vs-lbl">vs. Polymarket</span>Polymarket uses UMA token holders to resolve disputes — a governance token vote with no domain expertise requirement. A UMA whale with no knowledge of Brazilian politics can resolve a Brazilian election market. Clairvoyance routes disputes to people who actually know the subject.</div>
+        </div>
+      </div>
+
+      <div class="concept">
+        <div class="cl">
+          <div class="c-ico"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></div>
+          <div class="c-ttl">Structured Settlement Tokens</div>
+          <span class="c-badge">New · Unique</span>
+        </div>
+        <div class="cr">
+          <p>When multiple legs have resolved correctly but the final leg is still pending — sometimes months away — convert your partially-resolved position into a Structured Settlement Token (SST). The SST carries a fixed yield backed by the locked-in winnings, accruing until final resolution unlocks the full payout.</p>
+          <p>SSTs are tradeable — you can exit the waiting period entirely by selling the SST on the secondary market at a discount to present value. Capital flexibility becomes a feature instead of a constraint.</p>
+          <div class="c-vs"><span class="c-vs-lbl">vs. Polymarket &amp; Kalshi</span>On both platforms, capital is locked until final resolution with zero yield. If you've correctly called 4 out of 5 legs of a long-duration position, your money earns nothing while you wait. SSTs fix this.</div>
+        </div>
+      </div>
+
+      <div class="concept">
+        <div class="cl">
+          <div class="c-ico"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+          <div class="c-ttl">Cross-Platform Arbitrage Scanner</div>
+          <span class="c-badge">New · Unique</span>
+        </div>
+        <div class="cr">
+          <p>Clairvoyance continuously monitors implied probabilities on Polymarket and Kalshi for markets that overlap with Clairvoyance combo legs. When the combo-implied probability diverges significantly from what a competing platform shows, the scanner surfaces it as a potential misprice.</p>
+          <p>This turns competitors into a permanent feature — their liquidity and market depth generate price discovery signals that Clairvoyance users actively exploit. The more accurate Polymarket and Kalshi are on simple markets, the more valuable their data is for Clairvoyance combo pricing.</p>
+          <div class="c-vs"><span class="c-vs-lbl">vs. Polymarket &amp; Kalshi</span>Neither platform acknowledges the other exists. Both are blind to cross-market mispricings by design. Clairvoyance's scanner treats the entire prediction market ecosystem as an information source.</div>
+        </div>
+      </div>
+
+      <div class="concept">
+        <div class="cl">
+          <div class="c-ico"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <div class="c-ttl">Debate Markets</div>
+          <span class="c-badge">New · Unique</span>
+        </div>
+        <div class="cr">
+          <p>Two users with formally opposing theses enter a structured Debate Market. Each stakes capital. They make their argument publicly — text, data, charts. The crowd responds in real time by shifting the market odds between them. The debate runs for a fixed period; the final market price determines the winner.</p>
+          <p>Debate Markets have their own leaderboard. Top debaters earn a permanent Debate Record on their public profile and access to exclusive high-stakes debate pools. The crowd earns small fees for participating in the live probability-shifting during debates.</p>
+          <div class="c-vs"><span class="c-vs-lbl">vs. Polymarket &amp; Kalshi</span>Neither platform has any social or adversarial competitive layer. You bet in isolation. Debate Markets make prediction a spectator sport — and reward the crowd's judgment alongside the participants' performance.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- §05 REWARDS -->
+<section id="rewards">
+  <div class="shell">
+    <div class="sh rv"><span class="sn">05</span><h2>Reward &amp; Incentive System</h2></div>
+    <p class="sd">// how value flows to every participant in the ecosystem</p>
+    <div class="rg rv rv1">
+      <div class="rc">
+        <div class="rc-ico"><svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
+        <div class="rc-t">Trading Profits</div>
+        <div class="rc-d">Win money if your combination resolves correctly. Payout scales with combo complexity and the odds at entry.</div>
+      </div>
+      <div class="rc">
+        <div class="rc-ico"><svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg></div>
+        <div class="rc-t">Liquidity Provider Fees</div>
+        <div class="rc-d">Deposit into market pools. Earn a share of every trade that routes through your liquidity. Complex markets pay higher fee rates.</div>
+      </div>
+      <div class="rc">
+        <div class="rc-ico"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="rc-t">Insurance Pool Premiums <span class="rc-nf">New</span></div>
+        <div class="rc-d">Deposit into Prediction Insurance pools. Earn premiums from users buying coverage. Accurate oracle design makes this profitable for LPs.</div>
+      </div>
+      <div class="rc">
+        <div class="rc-ico"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+        <div class="rc-t">Correlation Mining</div>
+        <div class="rc-d">Earn CLRV tokens for identifying non-obvious market correlations before others. Discovering a pattern first rewards you as a market-maker of insight.</div>
+      </div>
+      <div class="rc">
+        <div class="rc-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div class="rc-t">Oracle Resolution Fees</div>
+        <div class="rc-d">Stake tokens to become a domain resolver. Earn fees for accurate resolutions. Valid challenge rulings earn fees from slashed oracle stakes.</div>
+      </div>
+      <div class="rc">
+        <div class="rc-ico"><svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+        <div class="rc-t">Governance Tokens</div>
+        <div class="rc-d">Active participants with strong Skill Passports earn CLRV tokens. Vote on protocol changes and earn a share of platform-level fee income.</div>
+      </div>
+      <div class="rc">
+        <div class="rc-ico"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <div class="rc-t">Thesis Reputation <span class="rc-nf">New</span></div>
+        <div class="rc-d">Well-documented public theses with version history and honest wrong-call records earn higher Trust Scores, unlocking premium market access.</div>
+      </div>
+      <div class="rc">
+        <div class="rc-ico"><svg viewBox="0 0 24 24"><circle cx="9" cy="7" r="3"/><path d="M3 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"/><circle cx="17" cy="7" r="3"/><path d="M21 21v-2a4 4 0 0 0-3-3.87"/></svg></div>
+        <div class="rc-t">Referral Bonuses</div>
+        <div class="rc-d">Earn a percentage of referred users' trading fees for 12 months. Reward network building without it becoming the primary growth mechanic.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- §06 MONEY FLOW -->
+<section id="flow">
+  <div class="shell">
+    <div class="sh rv"><span class="sn">06</span><h2>Money Flow Through the System</h2></div>
+    <p class="sd">// how capital enters, routes, and exits</p>
+    <div class="flow rv rv1">
+      <div class="fn">
+        <div class="fn-arr">→</div>
+        <div class="fn-ico"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <div class="fn-t">Traders Deposit</div>
+        <div class="fn-d">USDC enters smart contract escrow. No custodian holds funds.</div>
+      </div>
+      <div class="fn">
+        <div class="fn-arr">→</div>
+        <div class="fn-ico"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></div>
+        <div class="fn-t">Fees Split</div>
+        <div class="fn-d">Fees on each trade split between LPs, oracle pool, treasury, and insurance reserve.</div>
+      </div>
+      <div class="fn">
+        <div class="fn-arr">→</div>
+        <div class="fn-ico"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></div>
+        <div class="fn-t">Liquidity Pools</div>
+        <div class="fn-d">LPs enable the AMM to function. Complex markets earn higher returns.</div>
+      </div>
+      <div class="fn">
+        <div class="fn-arr">→</div>
+        <div class="fn-ico"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+        <div class="fn-t">Resolution Layer</div>
+        <div class="fn-d">Oracles confirm outcomes. Disputed resolutions route through Adversarial Challenge system.</div>
+      </div>
+      <div class="fn">
+        <div class="fn-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg></div>
+        <div class="fn-t">Winners Paid</div>
+        <div class="fn-d">Smart contract distributes automatically. SST holders receive yield plus principal.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- §07 COMPARISON -->
+<section id="compare">
+  <div class="shell">
+    <div class="sh rv"><span class="sn">07</span><h2>Full Platform Comparison</h2></div>
+    <p class="sd">// honest feature mapping — no spin, no omissions</p>
+    <div class="tbl-wrap rv rv1">
+      <table>
+        <thead><tr><th>Feature</th><th>Polymarket</th><th>Kalshi</th><th>Clairvoyance</th></tr></thead>
+        <tbody>
+          <tr><td>Simple Binary Markets</td><td class="ty">Yes</td><td class="ty">Yes</td><td class="tc">Yes</td></tr>
+          <tr><td>Multi-Outcome Markets</td><td class="tp">Limited</td><td class="tn">No</td><td class="tc">Yes</td></tr>
+          <tr><td>Custom Combo Builder (2–10 legs)</td><td class="tn">No</td><td class="tn">No</td><td class="tc">Yes</td></tr>
+          <tr><td>Conditional Logic (IF/AND/OR)</td><td class="tn">No</td><td class="tn">No</td><td class="tc">Yes — New</td></tr>
+          <tr><td>Thesis Canvas (text → markets)</td><td class="tn">No</td><td class="tn">No</td><td class="tc">Yes — New</td></tr>
+          <tr><td>Thesis Versioning &amp; Public Changelog</td><td class="tn">No</td><td class="tn">No</td><td class="tc">Yes — New</td></tr>
+          <tr><td>Correlation-Aware AMM Pricing</td><td class="tn">No</td><td class="tn">No</td><td class="tc">Yes</td></tr>
+          <tr><td>Partial Fill Engine</td><td class="tn">No</td><td class="tn">No</td><td class="tc">Yes — New</td></tr>
+          <tr><td>Position NFTs (composable)</td><td class="tn">No</td><td class="tn">No</td><td class="tc">Yes</td></tr>
+          <tr><td>Leg Extraction (sell individual legs)</td><td class="tn">No</td><td class="tn">No</td><td class="tc">Yes — New</td></tr>
+          <tr><td>Progressive Partial Payouts</td><td class="tn">No</td><td class="tn">No</td><td class="tc">Yes</td></tr>
+          <tr><td>Structured Settlement Tokens</td><td class="tn">No</td><td class="tn">No</td><td class="tc">Yes — New</td></tr>
+          <tr><td>Prediction Insurance</td><td class="tn">No</td><td class="tn">No</td><td class="tc">Yes — New</td></tr>
+          <tr><td>Adversarial Oracle Challenges</td><td class="tn">No</td><td class="tn">No</td><td class="tc">Yes — New</td></tr>
+          <tr><td>Cross-Platform Arbitrage Scanner</td><td class="tn">No</td><td class="tn">No</td><td class="tc">Yes — New</td></tr>
+          <tr><td>Debate Markets</td><td class="tn">No</td><td class="tn">No</td><td class="tc">Yes — New</td></tr>
+          <tr><td>Skill Passport &amp; Calibration Score</td><td class="tn">No</td><td class="tn">No</td><td class="tc">Yes</td></tr>
+          <tr><td>Shadow Portfolio (paper trading)</td><td class="tn">No</td><td class="tn">No</td><td class="tc">Yes</td></tr>
+          <tr><td>Fractal Sub-Markets</td><td class="tn">No</td><td class="tn">No</td><td class="tc">Yes</td></tr>
+          <tr><td>Meta-Markets (bet on market behavior)</td><td class="tn">No</td><td class="tn">No</td><td class="tc">Yes</td></tr>
+          <tr><td>Flash / 24-hr Resolution Markets</td><td class="tn">No</td><td class="tn">No</td><td class="tc">Yes</td></tr>
+          <tr><td>U.S. Regulatory Compliance</td><td class="tn">No</td><td class="ty">Yes</td><td class="tp">TBD</td></tr>
+          <tr><td>Institutional Liquidity Depth</td><td class="ty">Yes</td><td class="tp">Growing</td><td class="tp">Phase 2</td></tr>
+          <tr><td>ZK-Rollup Scaling</td><td class="tn">No</td><td class="tn">No</td><td class="tc">Yes</td></tr>
+          <tr><td>Multi-Chain Support</td><td class="tn">No</td><td class="tn">No</td><td class="tc">Yes</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+
+<!-- §08 RISKS -->
+<section id="risks">
+  <div class="shell">
+    <div class="sh rv"><span class="sn">08</span><h2>Risks &amp; Honest Limitations</h2></div>
+    <p class="sd">// what could go wrong — and how we're thinking about it</p>
+    <div class="risks rv rv1">
+
+      <div class="rk danger">
+        <div class="rk-hd">
+          <div class="rk-ico"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+          <div class="rk-t">Regulatory Uncertainty</div>
+        </div>
+        <div class="rk-d">Combinatorial crypto betting with governance tokens and NFT positions faces serious legal risk in the U.S. and EU. Kalshi's years-long regulatory fight was just for simple binary contracts. This is the hardest problem on the list.</div>
+        <div class="rk-mit"><span class="rk-ml">Mitigation Path</span>Geo-fencing for regulated markets. Legal counsel from day one. Potential Kalshi-style CFTC application for simplified tier. No promise this is solved.</div>
+      </div>
+
+      <div class="rk danger">
+        <div class="rk-hd">
+          <div class="rk-ico"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+          <div class="rk-t">Liquidity in Complex Markets</div>
+        </div>
+        <div class="rk-d">Getting meaningful two-sided liquidity into a 10-way combination market is genuinely unsolved at scale. Deep liquidity in simple markets does not automatically transfer. Shallow depth means punishing spreads and unfavorable combo odds.</div>
+        <div class="rk-mit"><span class="rk-ml">Mitigation Path</span>LP incentive structure heavily weighted toward complex markets. Bootstrapped liquidity in launch phase. AMM model designed to absorb imbalanced flow without breaking.</div>
+      </div>
+
+      <div class="rk warn">
+        <div class="rk-hd">
+          <div class="rk-ico"><svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></div>
+          <div class="rk-t">Oracle Manipulation Risk</div>
+        </div>
+        <div class="rk-d">Prediction Insurance and Adversarial Challenges create new attack surfaces. A well-funded actor could attempt coordinated oracle manipulation then claim insurance. Or flood the system with bad-faith challenges to drain slashing pools.</div>
+        <div class="rk-mit"><span class="rk-ml">Mitigation Path</span>Stake-weighting on challenges. Insurance pool rate limits per market. Multi-oracle mesh makes single-point manipulation prohibitively expensive.</div>
+      </div>
+
+      <div class="rk warn">
+        <div class="rk-hd">
+          <div class="rk-ico"><svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+          <div class="rk-t">Smart Contract Risk</div>
+        </div>
+        <div class="rk-d">Complex combinatorial logic, NFT splitting, SST conversion, and insurance pool mechanics represent a substantially larger attack surface than a simple binary market contract. A bug in any layer could result in loss of user funds with no recourse.</div>
+        <div class="rk-mit"><span class="rk-ml">Mitigation Path</span>Multiple independent audits before mainnet. Formal verification of core settlement logic. Bug bounty program. Staged rollout with hard position limits until battle-tested.</div>
+      </div>
+
+      <div class="rk warn">
+        <div class="rk-hd">
+          <div class="rk-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+          <div class="rk-t">Complexity Risk for Users</div>
+        </div>
+        <div class="rk-d">Combinatorial betting is genuinely harder to understand than binary markets. Users who construct positions they don't fully understand can lose money through confusion as much as through being wrong.</div>
+        <div class="rk-mit"><span class="rk-ml">Mitigation Path</span>Shadow Portfolio mode for all new complex features. Forced scenario review before confirming any Tier 2+ position. Skill Passport behavioral gates slow-roll access to the most complex mechanics.</div>
+      </div>
+
+      <div class="rk warn">
+        <div class="rk-hd">
+          <div class="rk-ico"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+          <div class="rk-t">Competing Against Polymarket's Network Effects</div>
+        </div>
+        <div class="rk-d">Polymarket has hundreds of millions in volume, deep institutional liquidity, brand recognition, and years of network effects. Clairvoyance's Tier 1 must be as good or better — a claim that's easier to make than to execute.</div>
+        <div class="rk-mit"><span class="rk-ml">Mitigation Path</span>Don't compete on Polymarket's terms in Phase 1. Launch with features they explicitly don't have. Use their own data against them via the Cross-Platform Scanner. Attract traders who have outgrown Polymarket.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- §09 TECH STACK -->
+<section id="tech">
+  <div class="shell">
+    <div class="sh rv"><span class="sn">09</span><h2>Technology &amp; Infrastructure</h2></div>
+    <p class="sd">// production-oriented choices built for institutional volume from day one</p>
+    <div class="stack rv rv1">
+      <div class="sc amber">
+        <div class="sc-lbl">Blockchain Layer</div>
+        <div class="si"><span class="si-d"></span>Solidity Smart Contracts</div>
+        <div class="si"><span class="si-d"></span>ZK-Rollups (StarkNet / zkSync)</div>
+        <div class="si"><span class="si-d"></span>Ethereum L1 Settlement</div>
+        <div class="si"><span class="si-d"></span>LayerZero Cross-chain Bridge</div>
+        <div class="si"><span class="si-d"></span>ERC-721 Position NFTs</div>
+        <div class="si"><span class="si-d"></span>ERC-20 CLRV Governance Token</div>
+        <div class="si"><span class="si-d"></span>SST Fixed-Yield Token Standard</div>
+      </div>
+      <div class="sc emerald">
+        <div class="sc-lbl">Oracle &amp; Data</div>
+        <div class="si"><span class="si-d"></span>Chainlink Price &amp; Event Feeds</div>
+        <div class="si"><span class="si-d"></span>The Graph Protocol Indexing</div>
+        <div class="si"><span class="si-d"></span>Decentralized Resolver Network</div>
+        <div class="si"><span class="si-d"></span>Real-Time Correlation Engine</div>
+        <div class="si"><span class="si-d"></span>Polymarket / Kalshi Price Feed</div>
+        <div class="si"><span class="si-d"></span>IPFS Thesis &amp; Metadata Storage</div>
+        <div class="si"><span class="si-d"></span>Insurance Actuarial Oracle</div>
+      </div>
+      <div class="sc sapphire">
+        <div class="sc-lbl">Frontend &amp; Execution</div>
+        <div class="si"><span class="si-d"></span>React + Web3.js Interface</div>
+        <div class="si"><span class="si-d"></span>Hybrid CLOB Off-Chain Matching</div>
+        <div class="si"><span class="si-d"></span>Correlation Matrix AMM Engine</div>
+        <div class="si"><span class="si-d"></span>LLM Thesis Parser (Inference API)</div>
+        <div class="si"><span class="si-d"></span>Wallet-Agnostic Auth Layer</div>
+        <div class="si"><span class="si-d"></span>Risk Fingerprint Behavioral Model</div>
+        <div class="si"><span class="si-d"></span>Mobile-First Progressive Web App</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- §10 GETTING STARTED -->
+<section id="start">
+  <div class="shell">
+    <div class="sh rv"><span class="sn">10</span><h2>Getting Started</h2></div>
+    <p class="sd">// from zero to first position in eight steps</p>
+    <div class="gs rv rv1">
+      <div class="gi"><div class="gi-n">1</div><div class="gi-c"><div class="gi-t">Connect your Web3 wallet</div><div class="gi-d">MetaMask, Coinbase Wallet, or any WalletConnect-compatible wallet. No account required — your wallet address is your identity.</div></div></div>
+      <div class="gi"><div class="gi-n">2</div><div class="gi-c"><div class="gi-t">Deposit USDC or accepted tokens</div><div class="gi-d">Funds go directly into your non-custodial smart contract balance. The platform never holds your capital.</div></div></div>
+      <div class="gi"><div class="gi-n">3</div><div class="gi-c"><div class="gi-t">Browse markets or open Thesis Canvas</div><div class="gi-d">Explore trending single-outcome markets or write your first thesis in plain English and let the AI propose a combo structure.</div></div></div>
+      <div class="gi"><div class="gi-n">4</div><div class="gi-c"><div class="gi-t">Run the full scenario matrix before confirming</div><div class="gi-d">See your exact payout under every possible combination of outcomes. Understand every failure mode before placing a single dollar.</div></div></div>
+      <div class="gi"><div class="gi-n">5</div><div class="gi-c"><div class="gi-t">Confirm transaction and receive Position NFT</div><div class="gi-d">Your combo mints as a composable token. It appears in your wallet and your Portfolio Dashboard immediately.</div></div></div>
+      <div class="gi"><div class="gi-n">6</div><div class="gi-c"><div class="gi-t">Monitor with correlation heatmap and alerts</div><div class="gi-d">Set probability-shift alerts on any leg. Watch your portfolio's correlation exposure in real time. React before value drifts silently.</div></div></div>
+      <div class="gi"><div class="gi-n">7</div><div class="gi-c"><div class="gi-t">Trade, extract, or hold as legs resolve</div><div class="gi-d">Sell the position early. Extract individual legs. Convert resolved winnings into SSTs for yield. Or hold to full settlement and collect automatically.</div></div></div>
+      <div class="gi"><div class="gi-n">8</div><div class="gi-c"><div class="gi-t">Build your Skill Passport and public thesis record</div><div class="gi-d">Every resolved position updates your Calibration Score by domain. Document your reasoning publicly. Reputation is earned here — not bought.</div></div></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- MANIFESTO -->
+<section style="border-bottom:none;padding-bottom:0;">
+  <div class="shell">
+    <div class="manifesto rv">
+      <h2>Why Combinatorial<br>Markets <em>Matter</em></h2>
+      <p><strong>Real-world complexity:</strong> Events don't happen in isolation — they influence each other, correlate, cascade. Betting on combinations lets you express a nuanced, structured view of how the world works rather than fragmenting it across disconnected markets that lose the thesis entirely.</p>
+      <p><strong>Better information aggregation:</strong> Combinatorial markets reveal not just what might happen, but how different events relate in the crowd's estimation. The correlation data alone is valuable to decision-makers, researchers, and institutions — not just bettors.</p>
+      <p><strong>Market efficiency:</strong> Expressing a complete multi-leg thesis in one position concentrates liquidity and price discovery instead of scattering it. The market becomes more efficient when the full thesis trades as a unit rather than approximated by five separate positions.</p>
+      <p><strong>Capital accountability:</strong> Structured Settlement Tokens, Prediction Insurance, and Adversarial Oracle Challenges aren't just features — they're a commitment that this platform takes capital seriously. Users aren't placing bets in a black box where bad resolutions have no recourse.</p>
+      <p>// Clairvoyance V3 Prototype · Complete Strategy Document · 2025 · All figures and features are conceptual and subject to change</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="fl">Clairvoyance · V3 Prototype · Complete Strategy Guide · 2025</div>
+  <div class="fr">What Prediction Markets Are Supposed to Be</div>
+</footer>
+
+</div>
+
+<script>
+/* CURSOR */
+const cur=document.getElementById('cur');
+let cx=0,cy=0,tx=0,ty=0;
+document.addEventListener('mousemove',e=>{tx=e.clientX;ty=e.clientY;});
+(function loop(){cx+=(tx-cx)*.15;cy+=(ty-cy)*.15;cur.style.left=cx+'px';cur.style.top=cy+'px';requestAnimationFrame(loop);})();
+document.querySelectorAll('a,button,[role="button"],.fac-hd,.concept,.rc,.rk,.hs,.gi,.fn').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cur.classList.add('big'));
+  el.addEventListener('mouseleave',()=>cur.classList.remove('big'));
+});
+
+/* FEATURE ACCORDIONS */
+document.querySelectorAll('[data-fac]').forEach(f=>{
+  const hd=f.querySelector('.fac-hd');
+  hd.addEventListener('click',()=>{
+    const open=f.classList.contains('open');
+    document.querySelectorAll('[data-fac].open').forEach(x=>x.classList.remove('open'));
+    if(!open)f.classList.add('open');
+  });
+  hd.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();hd.click();}});
+});
+document.querySelector('[data-fac]').classList.add('open');
+
+/* SCROLL REVEAL */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}});
+},{threshold:0.06});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+
+/* ACTIVE NAV */
+const secs=document.querySelectorAll('section[id]');
+const navAs=document.querySelectorAll('.nr a');
+new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      navAs.forEach(a=>a.classList.remove('on'));
+      const m=document.querySelector(`.nr a[href="#${e.target.id}"]`);
+      if(m)m.classList.add('on');
+    }
+  });
+},{threshold:0.35}).observe && secs.forEach(s=>{
+  new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        navAs.forEach(a=>a.classList.remove('on'));
+        const m=document.querySelector(`.nr a[href="#${e.target.id}"]`);
+        if(m)m.classList.add('on');
+      }
+    });
+  },{threshold:0.35}).observe(s);
+});
+</script>
+
+</body>
+</html>
